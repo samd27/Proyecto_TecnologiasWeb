@@ -1,0 +1,12 @@
+{
+    "name": "sersh/ola-de-cambio_app",
+    "authors": [
+        {
+            "name": "samd",
+            "email": "sershdiaz@hotmail.com"
+        }
+    ],
+    "require": {
+        "slim/psr7": "^1.7"
+    }
+}

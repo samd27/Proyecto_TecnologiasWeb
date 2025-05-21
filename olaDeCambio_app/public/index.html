@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ola de Cambio – Cuidemos el Mar</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header>
+    <h1>Ola de Cambio</h1>
+    <p>Conciencia sobre el cuidado del mar – Inspirado en la ODS 14</p>
+  </header>
+
+  <nav>
+    <a href="#" class="tablink active" onclick="openTab(event, 'inicio')">Inicio</a>
+    <a href="#" class="tablink" onclick="openTab(event, 'informacion')">Información</a>
+    <a href="#" class="tablink" onclick="openTab(event, 'estadisticas')">Estadísticas</a>
+    <a href="#" class="tablink" onclick="openTab(event, 'reportes')">Quejas</a>
+    <a href="#" class="tablink" onclick="openTab(event, 'login')">Login</a>
+  </nav>
+
+  <div class="container">
+    <!-- INICIO -->
+    <div id="inicio" class="tabcontent active">
+      <h2>Bienvenido al Mundo Marino</h2>
+      <p>Los océanos cubren más del 70% de la superficie de la Tierra y albergan una increíble diversidad de vida...</p>
+      <div class="image-gallery">
+        <img src="https://source.unsplash.com/random/300x200/?ocean" alt="Océano">
+        <img src="https://source.unsplash.com/random/300x200/?coral" alt="Coral">
+        <img src="https://source.unsplash.com/random/300x200/?whale" alt="Ballena">
+      </div>
+      <h3>Datos Interesantes</h3>
+      <ul>
+        <li>El océano produce al menos el 50% del oxígeno del planeta.</li>
+        <li>El 80% de toda la vida se encuentra bajo la superficie del océano.</li>
+        <li>La Fosa de las Marianas es el punto más profundo, con 11,034 m.</li>
+        <li>Menos del 5% del océano ha sido explorado por humanos.</li>
+      </ul>
+    </div>
+
+    <!-- INFORMACIÓN -->
+    <div id="informacion" class="tabcontent">
+      <h2>Información sobre la ODS 14</h2>
+      <p>La ODS 14 busca conservar y utilizar de forma sostenible los océanos, mares y recursos marinos...</p>
+      <ul>
+        <li>Reducir la contaminación marina.</li>
+        <li>Proteger ecosistemas marinos y costeros.</li>
+        <li>Regular la pesca y eliminar subsidios dañinos.</li>
+        <li>Apoyar la investigación científica marina.</li>
+      </ul>
+    </div>
+
+    <!-- ESTADÍSTICAS -->
+    <div id="estadisticas" class="tabcontent">
+      <h2>Estadísticas del Océano</h2>
+      <div class="datos-grid">
+        <div>
+          <h3>70%</h3>
+          <p>de la Tierra cubierta por océanos</p>
+        </div>
+        <div>
+          <h3>8M</h3>
+          <p>de toneladas de plástico por año</p>
+        </div>
+        <div>
+          <h3>30%</h3>
+          <p>de especies marinas sobreexplotadas</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUEJAS -->
+    <div id="reportes" class="tabcontent">
+      <div class="form-container">
+        <h2>Formulario de Quejas y Reportes</h2>
+        <form>
+          <label for="nombre">Nombre completo:</label>
+          <input type="text" id="nombre" name="nombre" required>
+
+          <label for="email">Correo electrónico:</label>
+          <input type="email" id="email" name="email" required>
+
+          <label for="tipo">Tipo de reporte:</label>
+          <select id="tipo" name="tipo" required>
+            <option value="">Seleccione una opción</option>
+            <option value="contaminacion">Contaminación marina</option>
+            <option value="fauna">Fauna en peligro</option>
+            <option value="pesca">Pesca ilegal</option>
+            <option value="otro">Otro</option>
+          </select>
+
+          <label for="ubicacion">Ubicación aproximada:</label>
+          <input type="text" id="ubicacion" name="ubicacion" required>
+
+          <label for="descripcion">Descripción detallada:</label>
+          <textarea id="descripcion" name="descripcion" rows="5" required></textarea>
+
+          <label for="fecha">Fecha del incidente:</label>
+          <input type="date" id="fecha" name="fecha">
+
+          <label for="archivo">Adjuntar archivo:</label>
+          <input type="file" id="archivo" name="archivo">
+
+          <button type="submit">Enviar Reporte</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="login" class="tabcontent">
+      <div class="login-container">
+        <h2>Iniciar Sesión</h2>
+        <form>
+          <label for="username">Usuario:</label>
+          <input type="text" id="username" name="username" required>
+
+          <label for="password">Contraseña:</label>
+          <input type="password" id="password" name="password" required>
+
+          <button type="submit">Ingresar</button>
+        </form>
+        <p>¿No tienes cuenta? <a href="#">Regístrate aquí</a></p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Ola de Cambio – Proyecto para la conciencia sobre el cuidado del mar</p>
+    <p>Contacto: contacto@oladecambio.org | Tel: +52 222 123 4567</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

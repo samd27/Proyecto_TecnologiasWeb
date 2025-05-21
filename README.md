@@ -1,20 +1,16 @@
-# 🌊 Proyecto: **Ola de Cambio**
+# Ola de Cambio 🌊  
 
-> _Un proyecto del equipo **Tazos Dorados**_
+> Proyecto del equipo **Tazos Dorados**  
 
----
+## Objetivo  
+Pagina Web para **concientizar** sobre protección oceánica (ODS 14), promoviendo:  
+- formación clara sobre problemas marinos  
+- Hábitos sostenibles  
+- 🎓Educación mbiental interactiva  
+-  Participación ciudadana en campañas  
 
-## 📋 Descripción
-
-**Ola de Cambio** es un proyecto desarrollado con el objetivo de [aquí puedes describir brevemente el propósito del proyecto].  
-Está a cargo del equipo **Tazos Dorados**, comprometido con la innovación y el trabajo en equipo.
-
----
-
-## 🧑‍🤝‍🧑 Equipo: **Tazos Dorados**
-
-- ✨ Integrante 1
-- ✨ Integrante 2
-- ✨ Integrante 3  _(Agrega más nombres si quieres)_
-
----
+## Equipo  
+- Muñoz Díaz Sergio Abraham  
+- Sarmiento Totolhua Angel  
+- Torralba Cerezo Luis Carlos  
+- Vergara Navarro Jonathan  
