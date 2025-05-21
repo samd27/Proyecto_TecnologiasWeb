@@ -4,9 +4,9 @@
 
 ## Objetivo  
 Pagina Web para **concientizar** sobre protección oceánica (ODS 14), promoviendo:  
-- formación clara sobre problemas marinos  
+- Formación clara sobre problemas marinos  
 - Hábitos sostenibles  
-- 🎓Educación mbiental interactiva  
+- 🎓ucación mbaiental interactiva  
 -  Participación ciudadana en campañas  
 
 ## Equipo  
