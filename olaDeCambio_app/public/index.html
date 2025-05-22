@@ -72,41 +72,58 @@
     </div>
 
     <!-- QUEJAS -->
-    <div id="reportes" class="tabcontent">
-      <div class="form-container">
-        <h2>Formulario de Quejas y Reportes</h2>
-        <form>
-          <label for="nombre">Nombre completo:</label>
-          <input type="text" id="nombre" name="nombre" required>
+    <!-- Fragmento actualizado en la sección #reportes -->
+<div id="reportes" class="tabcontent">
+  <div class="form-container">
+    <h2>Formulario de Quejas y Reportes</h2>
+    <form action="/api/reportes" method="POST">
+      <label for="nombre">Nombre completo:</label>
+      <input type="text" id="nombre" name="nombre_completo" required>
 
-          <label for="email">Correo electrónico:</label>
-          <input type="email" id="email" name="email" required>
+      <label for="email">Correo electrónico:</label>
+      <input type="email" id="email" name="correo_electronico" required>
 
-          <label for="tipo">Tipo de reporte:</label>
-          <select id="tipo" name="tipo" required>
-            <option value="">Seleccione una opción</option>
-            <option value="contaminacion">Contaminación marina</option>
-            <option value="fauna">Fauna en peligro</option>
-            <option value="pesca">Pesca ilegal</option>
-            <option value="otro">Otro</option>
-          </select>
+      <label for="tipo">Tipo de reporte:</label>
+      <select id="tipo" name="tipo_reporte" required>
+        <option value="">Seleccione una opción</option>
+        <option value="contaminacion">Contaminación marina</option>
+        <option value="fauna">Fauna en peligro</option>
+        <option value="pesca">Pesca ilegal</option>
+        <option value="otro">Otro</option>
+      </select>
 
-          <label for="ubicacion">Ubicación aproximada:</label>
-          <input type="text" id="ubicacion" name="ubicacion" required>
+      <label for="ubicacion">Ubicación (estado con costa):</label>
+      <select id="ubicacion" name="ubicacion" required>
+        <option value="">Seleccione un estado</option>
+        <option value="Baja California">Baja California</option>
+        <option value="Baja California Sur">Baja California Sur</option>
+        <option value="Campeche">Campeche</option>
+        <option value="Chiapas">Chiapas</option>
+        <option value="Colima">Colima</option>
+        <option value="Guerrero">Guerrero</option>
+        <option value="Jalisco">Jalisco</option>
+        <option value="Nayarit">Nayarit</option>
+        <option value="Oaxaca">Oaxaca</option>
+        <option value="Quintana Roo">Quintana Roo</option>
+        <option value="Sinaloa">Sinaloa</option>
+        <option value="Sonora">Sonora</option>
+        <option value="Tabasco">Tabasco</option>
+        <option value="Tamaulipas">Tamaulipas</option>
+        <option value="Veracruz">Veracruz</option>
+        <option value="Yucatán">Yucatán</option>
+      </select>
 
-          <label for="descripcion">Descripción detallada:</label>
-          <textarea id="descripcion" name="descripcion" rows="5" required></textarea>
+      <label for="descripcion">Descripción detallada:</label>
+      <textarea id="descripcion" name="descripcion_detallada" rows="5" required></textarea>
 
-          <label for="fecha">Fecha del incidente:</label>
-          <input type="date" id="fecha" name="fecha">
+      <label for="fecha">Fecha del incidente:</label>
+      <input type="date" id="fecha" name="fecha_incidente" required>
 
-          <label for="archivo">Adjuntar archivo:</label>
-          <input type="file" id="archivo" name="archivo">
+      <button type="submit">Enviar Reporte</button>
+    </form>
+  </div>
+</div>
 
-          <button type="submit">Enviar Reporte</button>
-        </form>
-      </div>
-    </div>
 
     <!-- LOGIN -->
     <div id="login" class="tabcontent">
