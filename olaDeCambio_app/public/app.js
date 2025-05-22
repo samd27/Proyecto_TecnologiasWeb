@@ -16,43 +16,107 @@ function openTab(evt, tabName) {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  const form = document.querySelector('#reportes form');
+  const form = document.querySelector('#form-reporte');
+  const tablaBody = document.querySelector('#tabla-reportes tbody');
 
-  if (form) {
-    form.addEventListener('submit', async function (e) {
-      e.preventDefault();
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-      const formData = new FormData(form);
-      const datos = Object.fromEntries(formData.entries());
+    const datos = Object.fromEntries(new FormData(form).entries());
 
-      try {
-        const response = await fetch('http://localhost/Proyecto_TecnologiasWeb/olaDeCambio_app/backend/api/reportes', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(datos)
-        });
+    const url = datos.id
+      ? `http://localhost/Proyecto_TecnologiasWeb/olaDeCambio_app/backend/api/reportes/${datos.id}`
+      : `http://localhost/Proyecto_TecnologiasWeb/olaDeCambio_app/backend/api/reportes`;
 
-        if (!response.ok) {
-          throw new Error("Error en la solicitud");
-        }
+    const metodo = datos.id ? 'PUT' : 'POST';
 
-        let resultado;
-        try {
-          resultado = await response.json();
-        } catch (e) {
-          alert("La respuesta del servidor no fue JSON válido");
-          return;
-        }
+    if (!datos.id) delete datos.id;
 
-        if (resultado.status === 'ok') {
-          alert('Reporte enviado exitosamente');
-          form.reset();
-        } else {
-          alert('Ocurrió un error al enviar el reporte');
-        }
-      } catch (error) {
-        alert('Ocurrió un error al enviar el reporte');
-      }
+    const response = await fetch(url, {
+      method: metodo,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(datos)
     });
+
+    const res = await response.json();
+
+    if (res.status === 'ok') {
+      alert('Reporte guardado correctamente');
+      form.reset();
+      cargarReportes();
+    } else {
+      alert('Error al guardar el reporte');
+    }
+  });
+
+  async function cargarReportes() {
+    const response = await fetch('http://localhost/Proyecto_TecnologiasWeb/olaDeCambio_app/backend/api/reportes');
+    const reportes = await response.json();
+
+    tablaBody.innerHTML = '';
+   reportes.forEach(r => {
+  const fila = document.createElement('tr');
+
+  // Mapeo de valores técnicos a texto legible
+  const tipoMap = {
+    contaminacion: 'Contaminación marina',
+    fauna: 'Avistamiento de fauna en peligro',
+    pesca: 'Pesca ilegal',
+    otro: 'Otro'
+  };
+
+  fila.innerHTML = `
+    <td style="display:none;">${r.id}</td>
+    <td>${r.nombre_completo}</td>
+    <td>${r.correo_electronico}</td>
+    <td>${tipoMap[r.tipo_reporte] || r.tipo_reporte}</td>
+    <td>${r.ubicacion}</td>
+    <td>${r.fecha_incidente}</td>
+    <td>
+      <button class="editar" data-id="${r.id}">Editar</button>
+      <button class="eliminar" data-id="${r.id}" style="background-color: #e53935; color: white;">Eliminar</button>
+    </td>
+  `;
+  tablaBody.appendChild(fila);
+});
+
+
+    document.querySelectorAll('.editar').forEach(btn =>
+      btn.addEventListener('click', e => editarReporte(e.target.dataset.id, reportes)));
+
+    document.querySelectorAll('.eliminar').forEach(btn =>
+      btn.addEventListener('click', e => eliminarReporte(e.target.dataset.id)));
   }
+
+  function editarReporte(id, datos) {
+    const reporte = datos.find(r => r.id === id);
+    if (!reporte) return;
+
+    form.id.value = reporte.id;
+    form.nombre_completo.value = reporte.nombre_completo;
+    form.correo_electronico.value = reporte.correo_electronico;
+    form.tipo_reporte.value = reporte.tipo_reporte;
+    form.ubicacion.value = reporte.ubicacion;
+    form.descripcion_detallada.value = reporte.descripcion_detallada;
+    form.fecha_incidente.value = reporte.fecha_incidente;
+  }
+
+  async function eliminarReporte(id) {
+    if (!confirm('¿Eliminar este reporte?')) return;
+
+    const res = await fetch(`http://localhost/Proyecto_TecnologiasWeb/olaDeCambio_app/backend/api/reportes/${id}`, {
+      method: 'DELETE'
+    });
+
+    const resultado = await res.json();
+    if (resultado.status === 'ok') {
+      alert('Reporte eliminado');
+      cargarReportes();
+    } else {
+      alert('Error al eliminar');
+    }
+  }
+
+  // Cargar los reportes al iniciar
+  cargarReportes();
 });

@@ -2,22 +2,26 @@
   box-sizing: border-box;
   font-family: 'Arial', sans-serif;
 }
+
 body {
   margin: 0;
   padding: 0;
   background-color: #f0f8ff;
   color: #333;
 }
+
 header {
   background: linear-gradient(to right, #3399cc, #22699c);
   color: white;
   padding: 20px;
   text-align: center;
 }
+
 nav {
   background-color: #22699c;
   overflow: hidden;
 }
+
 nav a {
   float: left;
   display: block;
@@ -26,49 +30,62 @@ nav a {
   text-decoration: none;
   transition: background-color 0.3s;
 }
+
 nav a:hover {
   background-color: #3399cc;
 }
+
 .tabcontent {
   display: none;
   padding: 20px;
   animation: fadeEffect 0.8s;
 }
+
 @keyframes fadeEffect {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
 .active {
   display: block;
 }
+
 .tablink.active {
   background-color: #3399cc;
 }
+
 .container {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: auto;
   padding: 20px;
 }
-.login-container, .form-container {
+
+.login-container,
+.form-container {
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   padding: 20px;
-  margin: 20px auto;
-  max-width: 500px;
+  margin: 20px 0;
+  width: 100%;
 }
+
 h2 {
   color: #22699c;
   border-bottom: 2px solid #3399cc;
   padding-bottom: 10px;
 }
-input, textarea, select {
+
+input,
+textarea,
+select {
   width: 100%;
   padding: 10px;
   margin: 10px 0;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
 button {
   background-color: #22699c;
   color: white;
@@ -78,9 +95,11 @@ button {
   cursor: pointer;
   transition: background-color 0.3s;
 }
+
 button:hover {
   background-color: #3399cc;
 }
+
 footer {
   background-color: #22699c;
   color: white;
@@ -88,27 +107,98 @@ footer {
   padding: 20px;
   margin-top: 40px;
 }
+
 .image-gallery {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin: 20px 0;
 }
+
 .image-gallery img {
   width: 30%;
   border-radius: 8px;
   transition: transform 0.3s;
 }
+
 .image-gallery img:hover {
   transform: scale(1.05);
 }
+
 .datos-grid {
   display: flex;
   justify-content: space-around;
   text-align: center;
   margin: 20px 0;
 }
+
 .datos-grid div h3 {
   font-size: 2rem;
   color: #0077aa;
+}
+
+/* Estilo para sección de reportes */
+#reportes .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+
+/* Formulario (lado izquierdo) */
+#reportes .formulario {
+  flex: 0 0 350px;
+  min-width: 300px;
+}
+
+/* Tabla (lado derecho) */
+#reportes .tabla-container {
+  flex: 1 1 auto;
+  min-width: 400px;
+    width: 100%;
+  max-width: 700px;
+  overflow-x: auto;
+}
+
+/* Tabla de reportes */
+#tabla-reportes {
+  width: 100%;
+  max-width: 1000px;
+  overflow-x: auto;
+
+
+}
+
+#tabla-reportes td,
+#tabla-reportes th {
+  padding: 8px 12px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+#tabla-reportes td:nth-child(3),
+#tabla-reportes td:nth-child(4),
+#tabla-reportes td:nth-child(5) {
+  white-space: nowrap;
+}
+
+/* Botones con separación y estilo */
+#tabla-reportes button {
+  margin-bottom: 6px;
+  padding: 6px 10px;
+  font-size: 0.9em;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#tabla-reportes .editar {
+  background-color: #1565c0;
+  color: white;
+}
+
+#tabla-reportes .eliminar {
+  background-color: #e53935;
+  color: white;
 }

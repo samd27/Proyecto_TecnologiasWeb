@@ -2,12 +2,11 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ola de Cambio – Cuidemos el Mar</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
   <header>
     <h1>Ola de Cambio</h1>
     <p>Conciencia sobre el cuidado del mar – Inspirado en la ODS 14</p>
@@ -71,59 +70,80 @@
       </div>
     </div>
 
-    <!-- QUEJAS -->
-    <!-- Fragmento actualizado en la sección #reportes -->
-<div id="reportes" class="tabcontent">
-  <div class="form-container">
-    <h2>Formulario de Quejas y Reportes</h2>
-    <form action="/api/reportes" method="POST">
-      <label for="nombre">Nombre completo:</label>
-      <input type="text" id="nombre" name="nombre_completo" required>
+    <!-- QUEJAS / REPORTES -->
+    <div id="reportes" class="tabcontent">
+      <div class="container" style="display: flex; flex-direction: column; gap: 20px; align-items: center;">
+        <!-- Formulario centrado arriba -->
+        <div class="form-container" style="width: 100%; max-width: 700px;">
+          <h2>Formulario de Quejas y Reportes</h2>
+          <form id="form-reporte">
+            <input type="hidden" id="id" name="id">
+            <label for="nombre">Nombre completo:</label>
+            <input type="text" id="nombre" name="nombre_completo" required>
 
-      <label for="email">Correo electrónico:</label>
-      <input type="email" id="email" name="correo_electronico" required>
+            <label for="email">Correo electrónico:</label>
+            <input type="email" id="email" name="correo_electronico" required>
 
-      <label for="tipo">Tipo de reporte:</label>
-      <select id="tipo" name="tipo_reporte" required>
-        <option value="">Seleccione una opción</option>
-        <option value="contaminacion">Contaminación marina</option>
-        <option value="fauna">Fauna en peligro</option>
-        <option value="pesca">Pesca ilegal</option>
-        <option value="otro">Otro</option>
-      </select>
+            <label for="tipo">Tipo de reporte:</label>
+            <select id="tipo" name="tipo_reporte" required>
+              <option value="">Seleccione una opción</option>
+              <option value="contaminacion">Contaminación marina</option>
+              <option value="fauna">Fauna en peligro</option>
+              <option value="pesca">Pesca ilegal</option>
+              <option value="otro">Otro</option>
+            </select>
 
-      <label for="ubicacion">Ubicación (estado con costa):</label>
-      <select id="ubicacion" name="ubicacion" required>
-        <option value="">Seleccione un estado</option>
-        <option value="Baja California">Baja California</option>
-        <option value="Baja California Sur">Baja California Sur</option>
-        <option value="Campeche">Campeche</option>
-        <option value="Chiapas">Chiapas</option>
-        <option value="Colima">Colima</option>
-        <option value="Guerrero">Guerrero</option>
-        <option value="Jalisco">Jalisco</option>
-        <option value="Nayarit">Nayarit</option>
-        <option value="Oaxaca">Oaxaca</option>
-        <option value="Quintana Roo">Quintana Roo</option>
-        <option value="Sinaloa">Sinaloa</option>
-        <option value="Sonora">Sonora</option>
-        <option value="Tabasco">Tabasco</option>
-        <option value="Tamaulipas">Tamaulipas</option>
-        <option value="Veracruz">Veracruz</option>
-        <option value="Yucatán">Yucatán</option>
-      </select>
+            <label for="ubicacion">Ubicación (estado con costa):</label>
+            <select id="ubicacion" name="ubicacion" required>
+              <option value="">Seleccione un estado</option>
+              <option value="Baja California">Baja California</option>
+              <option value="Baja California Sur">Baja California Sur</option>
+              <option value="Campeche">Campeche</option>
+              <option value="Chiapas">Chiapas</option>
+              <option value="Colima">Colima</option>
+              <option value="Guerrero">Guerrero</option>
+              <option value="Jalisco">Jalisco</option>
+              <option value="Nayarit">Nayarit</option>
+              <option value="Oaxaca">Oaxaca</option>
+              <option value="Quintana Roo">Quintana Roo</option>
+              <option value="Sinaloa">Sinaloa</option>
+              <option value="Sonora">Sonora</option>
+              <option value="Tabasco">Tabasco</option>
+              <option value="Tamaulipas">Tamaulipas</option>
+              <option value="Veracruz">Veracruz</option>
+              <option value="Yucatán">Yucatán</option>
+            </select>
 
-      <label for="descripcion">Descripción detallada:</label>
-      <textarea id="descripcion" name="descripcion_detallada" rows="5" required></textarea>
+            <label for="descripcion">Descripción detallada:</label>
+            <textarea id="descripcion" name="descripcion_detallada" rows="5" required></textarea>
 
-      <label for="fecha">Fecha del incidente:</label>
-      <input type="date" id="fecha" name="fecha_incidente" required>
+            <label for="fecha">Fecha del incidente:</label>
+            <input type="date" id="fecha" name="fecha_incidente" required>
 
-      <button type="submit">Enviar Reporte</button>
-    </form>
-  </div>
-</div>
+            <button type="submit">Enviar Reporte</button>
+          </form>
+        </div>
 
+        <!-- Tabla centrada abajo -->
+        <div class="form-container tabla-container" style="width: 100%; max-width: 1000px;">
+          <h2>Reportes Registrados</h2>
+          <table id="tabla-reportes" class="tabla-responsive" style="width: 100%; border-collapse: separate; border-spacing: 0 10px;">
+            <thead>
+              <tr>
+                <th style="display:none;">ID</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Tipo</th>
+                <th>Ubicación</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
     <!-- LOGIN -->
     <div id="login" class="tabcontent">
