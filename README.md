@@ -6,7 +6,7 @@
 Pagina Web para **concientizar** sobre protección oceánica (ODS 14), promoviendo:  
 - Formación clara sobre problemas marinos  
 - Hábitos sostenibles  
-- 🎓ucación mbaiental interactiva  
+- Educación ambiental interactiva  
 -  Participación ciudadana en campañas  
 
 ## Equipo  
