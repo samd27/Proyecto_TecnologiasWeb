@@ -14,14 +14,11 @@ function openTab(evt, tabName) {
 }
 
 
-
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector('#form-reporte');
   const tablaBody = document.querySelector('#tabla-reportes tbody');
   const botonSubmit = form.querySelector('#btn-submit');
   const botonCancelar = form.querySelector('#btn-cancelar');
-
-
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -47,14 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (res.status === 'ok') {
       alert('Reporte guardado correctamente');
       form.reset();
-      form.querySelector("button[type='submit']").textContent = "Enviar Reporte";
-      document.getElementById("btn-cancelar").style.display = "none"; // Ocultar botón cancelar
+      botonSubmit.textContent = "Enviar Reporte";
+      botonCancelar.style.display = "none";
       cargarReportes();
     } else {
       alert('Error al guardar el reporte');
     }
-
-
   });
 
   async function cargarReportes() {
@@ -62,32 +57,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const reportes = await response.json();
 
     tablaBody.innerHTML = '';
-   reportes.forEach(r => {
-  const fila = document.createElement('tr');
+    reportes.forEach(r => {
+      const fila = document.createElement('tr');
 
-  // Mapeo de valores técnicos a texto legible
-  const tipoMap = {
-    contaminacion: 'Contaminación marina',
-    fauna: 'Avistamiento de fauna en peligro',
-    pesca: 'Pesca ilegal',
-    otro: 'Otro'
-  };
+      const tipoMap = {
+        contaminacion: 'Contaminación marina',
+        fauna: 'Avistamiento de fauna en peligro',
+        pesca: 'Pesca ilegal',
+        otro: 'Otro'
+      };
 
-  fila.innerHTML = `
-    <td style="display:none;">${r.id}</td>
-    <td>${r.nombre_completo}</td>
-    <td>${r.correo_electronico}</td>
-    <td>${tipoMap[r.tipo_reporte] || r.tipo_reporte}</td>
-    <td>${r.ubicacion}</td>
-    <td>${r.fecha_incidente}</td>
-    <td>
-      <button class="editar" data-id="${r.id}">Editar</button>
-      <button class="eliminar" data-id="${r.id}" style="background-color: #e53935; color: white;">Eliminar</button>
-    </td>
-  `;
-  tablaBody.appendChild(fila);
-});
-
+      fila.innerHTML = `
+        <td style="display:none;">${r.id}</td>
+        <td>${r.nombre_completo}</td>
+        <td>${r.correo_electronico}</td>
+        <td>${tipoMap[r.tipo_reporte] || r.tipo_reporte}</td>
+        <td>${r.ubicacion}</td>
+        <td>${r.fecha_incidente}</td>
+        <td>
+          <button class="editar" data-id="${r.id}">Editar</button>
+          <button class="eliminar" data-id="${r.id}" style="background-color: #e53935; color: white;">Eliminar</button>
+        </td>
+      `;
+      tablaBody.appendChild(fila);
+    });
 
     document.querySelectorAll('.editar').forEach(btn =>
       btn.addEventListener('click', e => editarReporte(e.target.dataset.id, reportes)));
@@ -96,9 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.addEventListener('click', e => eliminarReporte(e.target.dataset.id)));
   }
 
- function editarReporte(id, datos) {
-    const reporte = datos.find(r => r.id == id); // doble igual permite comparación tipo string == int
-
+  function editarReporte(id, datos) {
+    const reporte = datos.find(r => r.id == id);
     if (!reporte) return;
 
     form.id.value = reporte.id;
@@ -109,15 +101,10 @@ document.addEventListener('DOMContentLoaded', () => {
     form.descripcion_detallada.value = reporte.descripcion_detallada;
     form.fecha_incidente.value = reporte.fecha_incidente;
 
-    // Cambiar el texto del botón
-    form.querySelector("button[type='submit']").textContent = "Actualizar Reporte";
     botonSubmit.textContent = "Actualizar Reporte";
     botonCancelar.style.display = "inline-block";
-    // Scroll automático al formulario
     form.scrollIntoView({ behavior: "smooth" });
-
-}
-
+  }
 
   async function eliminarReporte(id) {
     if (!confirm('¿Eliminar este reporte?')) return;
@@ -135,6 +122,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Cargar los reportes al iniciar
   cargarReportes();
+
+  botonCancelar.addEventListener('click', () => {
+    form.reset();
+    botonSubmit.textContent = "Enviar Reporte";
+    botonCancelar.style.display = "none";
+  });
 });
