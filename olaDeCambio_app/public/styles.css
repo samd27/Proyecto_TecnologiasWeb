@@ -202,3 +202,10 @@ footer {
   background-color: #e53935;
   color: white;
 }
+
+#btn-cancelar {
+  background-color: #e53935;
+  color: white;
+  margin-left: 10px;
+}
+

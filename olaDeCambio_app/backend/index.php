@@ -45,7 +45,6 @@ $app->delete('/api/reportes/{id}', function (Request $request, Response $respons
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-// PUT - actualizar (pendiente implementar Create.php para manejar esto)
 $app->put('/api/reportes/{id}', function (Request $request, Response $response, array $args) {
     $rawBody = $request->getBody()->getContents();
     $data = json_decode($rawBody, true);
@@ -59,5 +58,6 @@ $app->put('/api/reportes/{id}', function (Request $request, Response $response, 
     $response->getBody()->write($payload);
     return $response->withHeader('Content-Type', 'application/json');
 });
+
 
 $app->run();

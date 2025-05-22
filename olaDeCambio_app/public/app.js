@@ -18,6 +18,10 @@ function openTab(evt, tabName) {
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector('#form-reporte');
   const tablaBody = document.querySelector('#tabla-reportes tbody');
+  const botonSubmit = form.querySelector('#btn-submit');
+  const botonCancelar = form.querySelector('#btn-cancelar');
+
+
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -43,10 +47,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (res.status === 'ok') {
       alert('Reporte guardado correctamente');
       form.reset();
+      form.querySelector("button[type='submit']").textContent = "Enviar Reporte";
+      document.getElementById("btn-cancelar").style.display = "none"; // Ocultar botón cancelar
       cargarReportes();
     } else {
       alert('Error al guardar el reporte');
     }
+
+
   });
 
   async function cargarReportes() {
@@ -88,8 +96,9 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.addEventListener('click', e => eliminarReporte(e.target.dataset.id)));
   }
 
-  function editarReporte(id, datos) {
-    const reporte = datos.find(r => r.id === id);
+ function editarReporte(id, datos) {
+    const reporte = datos.find(r => r.id == id); // doble igual permite comparación tipo string == int
+
     if (!reporte) return;
 
     form.id.value = reporte.id;
@@ -99,7 +108,16 @@ document.addEventListener('DOMContentLoaded', () => {
     form.ubicacion.value = reporte.ubicacion;
     form.descripcion_detallada.value = reporte.descripcion_detallada;
     form.fecha_incidente.value = reporte.fecha_incidente;
-  }
+
+    // Cambiar el texto del botón
+    form.querySelector("button[type='submit']").textContent = "Actualizar Reporte";
+    botonSubmit.textContent = "Actualizar Reporte";
+    botonCancelar.style.display = "inline-block";
+    // Scroll automático al formulario
+    form.scrollIntoView({ behavior: "smooth" });
+
+}
+
 
   async function eliminarReporte(id) {
     if (!confirm('¿Eliminar este reporte?')) return;
