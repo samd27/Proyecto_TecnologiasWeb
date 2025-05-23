@@ -8,7 +8,15 @@ body {
   padding: 0;
   background-color: #f0f8ff;
   color: #333;
+  font-family: 'Georama', sans-serif;
+
 }
+
+
+h1, h2, h3, nav a, button {
+    font-family: 'Georama', sans-serif;
+}
+
 
 header {
   background: linear-gradient(to right, #3399cc, #22699c);
@@ -19,17 +27,21 @@ header {
 
 nav {
   background-color: #22699c;
-  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 10px 0;
 }
 
+
 nav a {
-  float: left;
-  display: block;
+  display: inline-block;
   color: white;
   padding: 14px 16px;
   text-decoration: none;
   transition: background-color 0.3s;
 }
+
 
 nav a:hover {
   background-color: #3399cc;
