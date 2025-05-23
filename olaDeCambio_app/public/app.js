@@ -1,64 +1,56 @@
 function openTab(evt, tabName) {
-  const tabcontents = document.getElementsByClassName("tabcontent");
-  for (let i = 0; i < tabcontents.length; i++) {
-    tabcontents[i].classList.remove("active");
-  }
-
-  const tablinks = document.getElementsByClassName("tablink");
-  for (let i = 0; i < tablinks.length; i++) {
-    tablinks[i].classList.remove("active");
-  }
-
-  document.getElementById(tabName).classList.add("active");
-  evt.currentTarget.classList.add("active");
+  $('.tabcontent').removeClass('active');
+  $('.tablink').removeClass('active');
+  $('#' + tabName).addClass('active');
+  $(evt.currentTarget).addClass('active');
 }
 
+$(document).ready(function () {
+  const $form = $('#form-reporte');
+  const $tablaBody = $('#tabla-reportes tbody');
+  const $botonSubmit = $('#btn-submit');
+  const $botonCancelar = $('#btn-cancelar');
 
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.querySelector('#form-reporte');
-  const tablaBody = document.querySelector('#tabla-reportes tbody');
-  const botonSubmit = form.querySelector('#btn-submit');
-  const botonCancelar = form.querySelector('#btn-cancelar');
+  const baseApi = '/Proyecto_TecnologiasWeb/olaDeCambio_app/backend/api/reportes';
 
-  form.addEventListener('submit', async (e) => {
+  $form.on('submit', function (e) {
     e.preventDefault();
 
-    const datos = Object.fromEntries(new FormData(form).entries());
+    const datos = Object.fromEntries(new FormData(this).entries());
+    const isUpdate = datos.id && datos.id.trim() !== '';
+    const url = isUpdate ? `${baseApi}/${datos.id}` : baseApi;
+    const metodo = isUpdate ? 'PUT' : 'POST';
 
-    const url = datos.id
-      ? `http://localhost/Proyecto_TecnologiasWeb/olaDeCambio_app/backend/api/reportes/${datos.id}`
-      : `http://localhost/Proyecto_TecnologiasWeb/olaDeCambio_app/backend/api/reportes`;
-
-    const metodo = datos.id ? 'PUT' : 'POST';
-
-    if (!datos.id) delete datos.id;
-
-    const response = await fetch(url, {
-      method: metodo,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(datos)
-    });
-
-    const res = await response.json();
-
-    if (res.status === 'ok') {
-      alert('Reporte guardado correctamente');
-      form.reset();
-      botonSubmit.textContent = "Enviar Reporte";
-      botonCancelar.style.display = "none";
-      cargarReportes();
-    } else {
-      alert('Error al guardar el reporte');
+    if (!isUpdate) {
+      delete datos.id;
     }
+
+    $.ajax({
+      url: url,
+      method: metodo,
+      contentType: 'application/json',
+      data: JSON.stringify(datos),
+      success: function (res) {
+        if (res.status === 'ok') {
+          alert('Reporte guardado correctamente');
+          $form[0].reset();
+          $form.find('[name=id]').val('');
+          $botonSubmit.text("Enviar Reporte");
+          $botonCancelar.hide();
+          cargarReportes();
+        } else {
+          alert('Error al guardar el reporte');
+        }
+      },
+      error: function () {
+        alert('Error al comunicarse con el servidor');
+      }
+    });
   });
 
-  async function cargarReportes() {
-    const response = await fetch('http://localhost/Proyecto_TecnologiasWeb/olaDeCambio_app/backend/api/reportes');
-    const reportes = await response.json();
-
-    tablaBody.innerHTML = '';
-    reportes.forEach(r => {
-      const fila = document.createElement('tr');
+  function cargarReportes() {
+    $.getJSON(baseApi, function (reportes) {
+      $tablaBody.empty();
 
       const tipoMap = {
         contaminacion: 'Contaminación marina',
@@ -67,66 +59,79 @@ document.addEventListener('DOMContentLoaded', () => {
         otro: 'Otro'
       };
 
-      fila.innerHTML = `
-        <td style="display:none;">${r.id}</td>
-        <td>${r.nombre_completo}</td>
-        <td>${r.correo_electronico}</td>
-        <td>${tipoMap[r.tipo_reporte] || r.tipo_reporte}</td>
-        <td>${r.ubicacion}</td>
-        <td>${r.fecha_incidente}</td>
-        <td>
-          <button class="editar" data-id="${r.id}">Editar</button>
-          <button class="eliminar" data-id="${r.id}" style="background-color: #e53935; color: white;">Eliminar</button>
-        </td>
-      `;
-      tablaBody.appendChild(fila);
+      reportes.forEach(r => {
+        const $fila = $(`
+          <tr>
+            <td style="display:none;">${r.id}</td>
+            <td>${r.nombre_completo}</td>
+            <td>${r.correo_electronico}</td>
+            <td>${tipoMap[r.tipo_reporte] || r.tipo_reporte}</td>
+            <td>${r.ubicacion}</td>
+            <td>${r.fecha_incidente}</td>
+            <td>
+              <button class="editar" data-id="${r.id}">Editar</button>
+              <button class="eliminar" data-id="${r.id}" style="background-color: #e53935; color: white;">Eliminar</button>
+            </td>
+          </tr>
+        `);
+        $tablaBody.append($fila);
+      });
+
+      $('.editar').click(function () {
+        const id = $(this).data('id');
+        editarReporte(id, reportes);
+      });
+
+      $('.eliminar').click(function () {
+        const id = $(this).data('id');
+        eliminarReporte(id);
+      });
     });
-
-    document.querySelectorAll('.editar').forEach(btn =>
-      btn.addEventListener('click', e => editarReporte(e.target.dataset.id, reportes)));
-
-    document.querySelectorAll('.eliminar').forEach(btn =>
-      btn.addEventListener('click', e => eliminarReporte(e.target.dataset.id)));
   }
 
   function editarReporte(id, datos) {
     const reporte = datos.find(r => r.id == id);
     if (!reporte) return;
 
-    form.id.value = reporte.id;
-    form.nombre_completo.value = reporte.nombre_completo;
-    form.correo_electronico.value = reporte.correo_electronico;
-    form.tipo_reporte.value = reporte.tipo_reporte;
-    form.ubicacion.value = reporte.ubicacion;
-    form.descripcion_detallada.value = reporte.descripcion_detallada;
-    form.fecha_incidente.value = reporte.fecha_incidente;
+    $form.find('[name=id]').val(reporte.id);
+    $form.find('[name=nombre_completo]').val(reporte.nombre_completo);
+    $form.find('[name=correo_electronico]').val(reporte.correo_electronico);
+    $form.find('[name=tipo_reporte]').val(reporte.tipo_reporte);
+    $form.find('[name=ubicacion]').val(reporte.ubicacion);
+    $form.find('[name=descripcion_detallada]').val(reporte.descripcion_detallada);
+    $form.find('[name=fecha_incidente]').val(reporte.fecha_incidente);
 
-    botonSubmit.textContent = "Actualizar Reporte";
-    botonCancelar.style.display = "inline-block";
-    form.scrollIntoView({ behavior: "smooth" });
+    $botonSubmit.text("Actualizar Reporte");
+    $botonCancelar.show();
+    $('html, body').animate({ scrollTop: $form.offset().top }, 600);
   }
 
-  async function eliminarReporte(id) {
+  function eliminarReporte(id) {
     if (!confirm('¿Eliminar este reporte?')) return;
 
-    const res = await fetch(`http://localhost/Proyecto_TecnologiasWeb/olaDeCambio_app/backend/api/reportes/${id}`, {
-      method: 'DELETE'
+    $.ajax({
+      url: `${baseApi}/${id}`,
+      method: 'DELETE',
+      success: function (res) {
+        if (res.status === 'ok') {
+          alert('Reporte eliminado');
+          cargarReportes();
+        } else {
+          alert('Error al eliminar');
+        }
+      },
+      error: function () {
+        alert('Error de red al eliminar');
+      }
     });
-
-    const resultado = await res.json();
-    if (resultado.status === 'ok') {
-      alert('Reporte eliminado');
-      cargarReportes();
-    } else {
-      alert('Error al eliminar');
-    }
   }
 
-  cargarReportes();
-
-  botonCancelar.addEventListener('click', () => {
-    form.reset();
-    botonSubmit.textContent = "Enviar Reporte";
-    botonCancelar.style.display = "none";
+  $botonCancelar.click(function () {
+    $form[0].reset();
+    $form.find('[name=id]').val('');
+    $botonSubmit.text("Enviar Reporte");
+    $botonCancelar.hide();
   });
+
+  cargarReportes();
 });
