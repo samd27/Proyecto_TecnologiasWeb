@@ -130,3 +130,48 @@ document.addEventListener('DOMContentLoaded', () => {
     botonCancelar.style.display = "none";
   });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const loginForm = document.querySelector("#login form");
+  const registroContainer = document.createElement("div");
+  const userDisplay = document.createElement("div");
+
+  userDisplay.id = "usuario-logueado";
+  userDisplay.style.textAlign = "right";
+  userDisplay.style.fontWeight = "bold";
+  userDisplay.style.margin = "10px";
+
+  document.body.insertBefore(userDisplay, document.body.firstChild);
+
+  async function verificarSesion() {
+    const res = await fetch("../backend/myapi/AUTH/session.php");
+    const data = await res.json();
+    if (data.usuario) {
+      userDisplay.textContent = "Sesión iniciada como: " + data.usuario;
+    }
+  }
+
+  verificarSesion();
+
+  if (loginForm) {
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const username = loginForm.username.value;
+      const password = loginForm.password.value;
+
+      const res = await fetch("../backend/myapi/AUTH/login.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        alert("Inicio de sesión exitoso");
+        userDisplay.textContent = "Sesión iniciada como: " + data.usuario;
+      } else {
+        alert(data.message);
+      }
+    });
+  }
+});
