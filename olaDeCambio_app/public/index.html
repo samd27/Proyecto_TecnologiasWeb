@@ -15,6 +15,9 @@
 
 </head>
 <body>
+  <button id="btn-logout" class="logout-button oculto">Cerrar sesión</button>
+
+
   <div id="usuario-logueado"></div>
   <header>
     <h1>Ola de Cambio</h1>
@@ -25,7 +28,7 @@
     <a href="#" class="tablink active" onclick="openTab(event, 'inicio')">Inicio</a>
     <a href="#" class="tablink" onclick="openTab(event, 'informacion')">Información</a>
     <a href="#" class="tablink" onclick="openTab(event, 'estadisticas')">Estadísticas</a>
-    <a href="#" class="tablink" onclick="openTab(event, 'reportes')">Quejas</a>
+    <a href="#" class="tablink oculto" id="nav-quejas" onclick="openTab(event, 'reportes')">Quejas</a>
     <a href="#" class="tablink" onclick="openTab(event, 'login')">Login</a>
   </nav>
 

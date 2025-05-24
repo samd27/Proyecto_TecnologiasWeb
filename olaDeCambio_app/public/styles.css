@@ -1,3 +1,28 @@
+#btn-logout {
+  position: absolute;
+  top: 25px;
+  left: 30px;
+  background: transparent;
+  border: 1px solid white;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-family: 'Georama', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 0.9rem;
+  z-index: 100;
+}
+
+#btn-logout:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.oculto {
+  display: none !important;
+}
+
+
 * {
   box-sizing: border-box;
   font-family: 'Arial', sans-serif;

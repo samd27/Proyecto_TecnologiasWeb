@@ -12,7 +12,21 @@ $(document).ready(function () {
   const $botonCancelar = $('#btn-cancelar');
   const baseApi = '/Proyecto_TecnologiasWeb/olaDeCambio_app/backend/api/reportes';
 
-  // CRUD de reportes
+  // ✅ Verificar sesión activa
+  $.getJSON('../backend/myapi/AUTH/session.php', function (data) {
+    if (data.usuario) {
+      $('#usuario-logueado').html(`
+        <div class="usuario-info">
+          <img src="img/user-icon.png" alt="Usuario" class="icono-usuario-img" />
+          <span>${data.usuario}</span>
+        </div>
+      `);
+      $('#nav-quejas').removeClass('oculto');
+      $('#btn-logout').removeClass('oculto');
+    }
+  });
+
+  // ✅ CRUD de reportes
   $form.on('submit', function (e) {
     e.preventDefault();
     const datos = Object.fromEntries(new FormData(this).entries());
@@ -133,7 +147,7 @@ $(document).ready(function () {
 
   cargarReportes();
 
-// Registro de usuario
+  // ✅ Registro
   $('#form-registro').on('submit', function (e) {
     e.preventDefault();
 
@@ -149,7 +163,7 @@ $(document).ready(function () {
         if (data.success) {
           alert('Registro exitoso');
           $('#form-registro')[0].reset();
-          openTab({ currentTarget: $('#login-tab')[0] }, 'login'); // asegúrate de que login-tab exista
+          openTab({ currentTarget: $('#login-tab')[0] }, 'login');
         } else {
           alert(data.message || 'Error al registrar');
         }
@@ -160,11 +174,7 @@ $(document).ready(function () {
     });
   });
 
-
-  
-
- // Login de usuario
-  // Login de usuario
+  // ✅ Login
   $('#login form').on('submit', function (e) {
     e.preventDefault();
 
@@ -178,13 +188,14 @@ $(document).ready(function () {
       contentType: 'application/json',
       success: function (data) {
         if (data.success) {
-         $('#usuario-logueado').html(`
-  <div class="usuario-info">
-    <img src="img/user-icon.png" alt="Usuario" class="icono-usuario-img" />
-    <span>${data.usuario}</span>
-  </div>
-`);
-
+          $('#usuario-logueado').html(`
+            <div class="usuario-info">
+              <img src="img/user-icon.png" alt="Usuario" class="icono-usuario-img" />
+              <span>${data.usuario}</span>
+            </div>
+          `);
+          $('#nav-quejas').removeClass('oculto');
+          $('#btn-logout').removeClass('oculto');
           alert('Inicio de sesión exitoso');
         } else {
           alert(data.message || 'Credenciales inválidas');
@@ -196,25 +207,25 @@ $(document).ready(function () {
     });
   });
 
-  // Ir a la pestaña de registro desde el enlace
-$('#btn-ir-registro').on('click', function (e) {
-  e.preventDefault();
+  // ✅ Ir a registro
+  $('#btn-ir-registro').on('click', function (e) {
+    e.preventDefault();
+    $('.tabcontent').removeClass('active');
+    $('.tablink').removeClass('active');
+    $('#registro').addClass('active');
+  });
 
-  // Oculta todas las secciones
-  $('.tabcontent').removeClass('active');
-  $('.tablink').removeClass('active');
+  // ✅ Volver a login
+  $('#btn-ir-login').on('click', function (e) {
+    e.preventDefault();
+    $('.tabcontent').removeClass('active');
+    $('#login').addClass('active');
+  });
 
-  // Muestra la sección de registro
-  $('#registro').addClass('active');
+  // ✅ Cerrar sesión
+  $('#btn-logout').on('click', function () {
+    $.get('../backend/myapi/AUTH/logout.php', function () {
+      location.reload();
+    });
+  });
 });
-
-// Volver a login desde registro
-$('#btn-ir-login').on('click', function (e) {
-  e.preventDefault();
-  $('.tabcontent').removeClass('active');
-  $('#login').addClass('active');
-});
-
-});
-
-
