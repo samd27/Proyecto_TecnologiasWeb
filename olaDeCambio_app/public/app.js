@@ -10,12 +10,11 @@ $(document).ready(function () {
   const $tablaBody = $('#tabla-reportes tbody');
   const $botonSubmit = $('#btn-submit');
   const $botonCancelar = $('#btn-cancelar');
-
   const baseApi = '/Proyecto_TecnologiasWeb/olaDeCambio_app/backend/api/reportes';
 
+  // CRUD de reportes
   $form.on('submit', function (e) {
     e.preventDefault();
-
     const datos = Object.fromEntries(new FormData(this).entries());
     const isUpdate = datos.id && datos.id.trim() !== '';
     const url = isUpdate ? `${baseApi}/${datos.id}` : baseApi;
@@ -51,7 +50,6 @@ $(document).ready(function () {
   function cargarReportes() {
     $.getJSON(baseApi, function (reportes) {
       $tablaBody.empty();
-
       const tipoMap = {
         contaminacion: 'Contaminación marina',
         fauna: 'Avistamiento de fauna en peligro',
@@ -134,49 +132,89 @@ $(document).ready(function () {
   });
 
   cargarReportes();
-});
 
-document.addEventListener("DOMContentLoaded", () => {
-  const loginForm = document.querySelector("#login form");
-  const registroContainer = document.createElement("div");
-  const userDisplay = document.createElement("div");
+// Registro de usuario
+  $('#form-registro').on('submit', function (e) {
+    e.preventDefault();
 
-  userDisplay.id = "usuario-logueado";
-  userDisplay.style.textAlign = "right";
-  userDisplay.style.fontWeight = "bold";
-  userDisplay.style.margin = "10px";
+    const usuario = $('#usuario').val();
+    const contrasena = $('#contrasena').val();
 
-  document.body.insertBefore(userDisplay, document.body.firstChild);
-
-  async function verificarSesion() {
-    const res = await fetch("../backend/myapi/AUTH/session.php");
-    const data = await res.json();
-    if (data.usuario) {
-      userDisplay.textContent = "Sesión iniciada como: " + data.usuario;
-    }
-  }
-
-  verificarSesion();
-
-  if (loginForm) {
-    loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const username = loginForm.username.value;
-      const password = loginForm.password.value;
-
-      const res = await fetch("../backend/myapi/AUTH/login.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
-
-      const data = await res.json();
-      if (data.success) {
-        alert("Inicio de sesión exitoso");
-        userDisplay.textContent = "Sesión iniciada como: " + data.usuario;
-      } else {
-        alert(data.message);
+    $.ajax({
+      url: '../backend/registro',
+      method: 'POST',
+      data: JSON.stringify({ usuario, contrasena }),
+      contentType: 'application/json',
+      success: function (data) {
+        if (data.success) {
+          alert('Registro exitoso');
+          $('#form-registro')[0].reset();
+          openTab({ currentTarget: $('#login-tab')[0] }, 'login'); // asegúrate de que login-tab exista
+        } else {
+          alert(data.message || 'Error al registrar');
+        }
+      },
+      error: function (xhr) {
+        alert('Error al registrar: ' + xhr.responseText);
       }
     });
-  }
+  });
+
+
+  
+
+ // Login de usuario
+  // Login de usuario
+  $('#login form').on('submit', function (e) {
+    e.preventDefault();
+
+    const username = $('#username').val();
+    const password = $('#password').val();
+
+    $.ajax({
+      url: '../backend/login',
+      method: 'POST',
+      data: JSON.stringify({ username, password }),
+      contentType: 'application/json',
+      success: function (data) {
+        if (data.success) {
+         $('#usuario-logueado').html(`
+  <div class="usuario-info">
+    <img src="img/user-icon.png" alt="Usuario" class="icono-usuario-img" />
+    <span>${data.usuario}</span>
+  </div>
+`);
+
+          alert('Inicio de sesión exitoso');
+        } else {
+          alert(data.message || 'Credenciales inválidas');
+        }
+      },
+      error: function (xhr) {
+        alert('Error al iniciar sesión: ' + xhr.responseText);
+      }
+    });
+  });
+
+  // Ir a la pestaña de registro desde el enlace
+$('#btn-ir-registro').on('click', function (e) {
+  e.preventDefault();
+
+  // Oculta todas las secciones
+  $('.tabcontent').removeClass('active');
+  $('.tablink').removeClass('active');
+
+  // Muestra la sección de registro
+  $('#registro').addClass('active');
 });
+
+// Volver a login desde registro
+$('#btn-ir-login').on('click', function (e) {
+  e.preventDefault();
+  $('.tabcontent').removeClass('active');
+  $('#login').addClass('active');
+});
+
+});
+
+

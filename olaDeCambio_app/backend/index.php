@@ -59,5 +59,32 @@ $app->put('/api/reportes/{id}', function (Request $request, Response $response, 
     return $response->withHeader('Content-Type', 'application/json');
 });
 
+$app->post('/registro', function ($request, $response) {
+    // ⚠️ Extraer contenido JSON crudo
+    $body = $request->getBody()->getContents();
+    $datos = json_decode($body, true);
+
+    // Asignar a $_POST manualmente
+    $_POST['usuario'] = $datos['usuario'] ?? null;
+    $_POST['contrasena'] = $datos['contrasena'] ?? null;
+
+    require_once __DIR__ . '/myapi/AUTH/register.php';
+
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+
+
+
+// POST /login
+$app->post('/login', function (Request $request, Response $response) {
+    $datos = $request->getParsedBody();
+    $_POST['username'] = $datos['username'] ?? '';
+    $_POST['password'] = $datos['password'] ?? '';
+    require_once __DIR__ . '/myapi/AUTH/login.php';
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+
 
 $app->run();

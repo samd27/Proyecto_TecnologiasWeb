@@ -84,12 +84,16 @@ nav a:hover {
 
 .login-container,
 .form-container {
-  background-color: white;
+     background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   padding: 20px;
-  margin: 20px 0;
+  margin: 20px auto;
   width: 100%;
+  max-width: 500px; 
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 h2 {
@@ -229,5 +233,28 @@ footer {
   background-color: #e53935;
   color: white;
   margin-left: 10px;
+}
+
+
+#usuario-logueado {
+  position: absolute;
+  top: 25px;
+  right: 40px;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  font-family: 'Georama', sans-serif;
+  font-weight: 600;
+  z-index: 100;
+}
+
+.icono-usuario-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  vertical-align: middle;
 }
 
