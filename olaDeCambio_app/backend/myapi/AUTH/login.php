@@ -1,25 +1,41 @@
 <?php
-session_start();
-header('Content-Type: application/json');
-require_once __DIR__ . '/../DataBase.php';
+namespace App\AUTH;
 
-$data = json_decode(file_get_contents("php://input"), true);
-$usuario = $data['username'];
-$contrasena = $data['password'];
+use App\DataBase;
+use PDO;
+use PDOException;
 
-$db = new DataBase();
-$conn = $db->getConexion();
+class Login {
+    public function iniciarSesion(array $data): array {
+        session_start();
 
-$query = "SELECT * FROM usuarios WHERE usuario = :usuario LIMIT 1";
-$stmt = $conn->prepare($query);
-$stmt->bindParam(':usuario', $usuario);
-$stmt->execute();
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (empty($data['username']) || empty($data['password'])) {
+            return ['success' => false, 'message' => 'Faltan datos'];
+        }
 
-if ($user && password_verify($contrasena, $user['contrasena'])) {
-    $_SESSION['usuario'] = $user['usuario'];
-    echo json_encode(["success" => true, "usuario" => $user['usuario']]);
-} else {
-    echo json_encode(["success" => false, "message" => "Credenciales inválidas"]);
+        $db = new DataBase();
+        $conn = $db->getConexion();
+
+        if (!$conn) {
+            return ['success' => false, 'message' => 'Error de conexión'];
+        }
+
+        try {
+            $stmt = $conn->prepare("SELECT * FROM usuarios WHERE usuario = :usuario");
+            $stmt->bindParam(':usuario', $data['username']);
+            $stmt->execute();
+
+            $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($usuario && password_verify($data['password'], $usuario['contrasena'])) {
+                $_SESSION['usuario'] = $usuario['usuario'];
+                return ['success' => true, 'message' => 'Inicio de sesión exitoso',
+                'usuario' => $usuario['usuario']];
+            } else {
+                return ['success' => false, 'message' => 'Credenciales incorrectas'];
+            }
+        } catch (PDOException $e) {
+            return ['success' => false, 'message' => 'Error interno'];
+        }
+    }
 }
-?>

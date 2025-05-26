@@ -175,37 +175,39 @@ $(document).ready(function () {
   });
 
   //  Login
-  $('#login form').on('submit', function (e) {
-    e.preventDefault();
+  // LOGIN
+$('#login form').on('submit', function (e) {
+  e.preventDefault();
 
-    const username = $('#username').val();
-    const password = $('#password').val();
+  const username = $('#username').val();
+  const password = $('#password').val();
 
-    $.ajax({
-      url: '../backend/login',
-      method: 'POST',
-      data: JSON.stringify({ username, password }),
-      contentType: 'application/json',
-      success: function (data) {
-        if (data.success) {
-          $('#usuario-logueado').html(`
-            <div class="usuario-info">
-              <img src="img/user-icon.png" alt="Usuario" class="icono-usuario-img" />
-              <span>${data.usuario}</span>
-            </div>
-          `);
-          $('#nav-quejas').removeClass('oculto');
-          $('#btn-logout').removeClass('oculto');
-          alert('Inicio de sesión exitoso');
-        } else {
-          alert(data.message || 'Credenciales inválidas');
-        }
-      },
-      error: function (xhr) {
-        alert('Error al iniciar sesión: ' + xhr.responseText);
+  $.ajax({
+    url: '../backend/login',
+    method: 'POST',
+    data: JSON.stringify({ username, password }),
+    contentType: 'application/json',
+    success: function (data) {
+      if (data.success) {
+        // Mostrar nombre del usuario en el contenedor ya existente
+        $('#usuario-nombre').text(data.usuario);
+        $('#usuario-logueado').removeClass('oculto');
+
+        // Mostrar secciones disponibles solo para usuarios logueados
+        $('#nav-quejas').removeClass('oculto');
+        $('#btn-logout').removeClass('oculto');
+
+        alert('Inicio de sesión exitoso');
+      } else {
+        alert(data.message || 'Credenciales inválidas');
       }
-    });
+    },
+    error: function (xhr) {
+      alert('Error al iniciar sesión: ' + xhr.responseText);
+    }
   });
+});
+
 
   // Ir a registro
   $('#btn-ir-registro').on('click', function (e) {
@@ -228,6 +230,22 @@ $(document).ready(function () {
       location.reload();
     });
   });
+
+  // Verificar si el usuario ya está logueado al cargar la página
+fetch('../backend/session')
+  .then(res => res.json())
+  .then(data => {
+    if (data.loggedIn && data.usuario) {
+      $('#usuario-nombre').text(data.usuario);
+      $('#usuario-logueado').removeClass('oculto');
+      $('#btn-logout').removeClass('oculto');
+      $('#nav-quejas').removeClass('oculto');
+    }
+  })
+  .catch(error => {
+    console.error('Error al verificar sesión:', error);
+  });
+
 });
 
 // Dashboard

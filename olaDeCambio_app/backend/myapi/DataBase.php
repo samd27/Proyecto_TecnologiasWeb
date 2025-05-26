@@ -1,27 +1,23 @@
 <?php
+namespace App;
+
+use PDO;
+use PDOException;
 
 class DataBase {
-    private $host = "localhost";
-    private $db = "oladecambio"; // Cambiar por el nombre real de tu base
-    private $user = "root";
-    private $password = "samd2704";
-    public $conexion;
+    private $conn;
 
     public function __construct() {
-        $this->conexion = $this->conectar();
-    }
-
-    public function conectar() {
         try {
-            $conexion = new PDO("mysql:host={$this->host};dbname={$this->db};charset=utf8", $this->user, $this->password);
-            $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            return $conexion;
-        } catch (PDOException $e) {
-            die("Error de conexión: " . $e->getMessage());
-        }
+    $this->conn = new PDO("mysql:host=localhost;dbname=oladecambio;charset=utf8", "root", "samd2704");
+    $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Error de conexión a la base de datos: " . $e->getMessage());
+}
+
     }
 
     public function getConexion() {
-        return $this->conexion;
+        return $this->conn;
     }
 }

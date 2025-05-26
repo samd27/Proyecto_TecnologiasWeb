@@ -1,5 +1,9 @@
 <?php
-require_once __DIR__ . '/../DataBase.php';
+namespace App\UPDATE;
+
+use App\DataBase;
+use PDO;
+use PDOException;
 
 class Update {
     private $conn;
@@ -11,17 +15,6 @@ class Update {
 
     public function actualizarReporte($data) {
         try {
-            if (
-                empty($data['id']) ||
-                empty($data['nombre_completo']) ||
-                empty($data['correo_electronico']) ||
-                empty($data['tipo_reporte']) ||
-                empty($data['ubicacion']) ||
-                empty($data['fecha_incidente'])
-            ) {
-                return false;
-            }
-
             $sql = "UPDATE reportes SET 
                         nombre_completo = :nombre,
                         correo_electronico = :correo,

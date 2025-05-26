@@ -1,5 +1,8 @@
 <?php
-require_once __DIR__ . '/../DataBase.php';
+namespace App\DELETE;
+
+use App\DataBase;
+use PDO;
 
 class Delete {
     private $conn;
@@ -10,11 +13,8 @@ class Delete {
     }
 
     public function eliminar($id) {
-        try {
-            $stmt = $this->conn->prepare("DELETE FROM reportes WHERE id = ?");
-            return $stmt->execute([$id]);
-        } catch (PDOException $e) {
-            return false;
-        }
+        $stmt = $this->conn->prepare("DELETE FROM reportes WHERE id = :id");
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
     }
 }

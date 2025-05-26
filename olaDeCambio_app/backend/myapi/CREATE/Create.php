@@ -1,5 +1,9 @@
 <?php
-require_once __DIR__ . '/../DataBase.php';
+namespace App\CREATE;
+
+use App\DataBase;
+use PDO;
+use PDOException;
 
 class Create {
     private $conn;
@@ -11,7 +15,6 @@ class Create {
 
     public function crearReporte($data) {
         try {
-            // Validar campos requeridos
             if (
                 empty($data['nombre_completo']) ||
                 empty($data['correo_electronico']) ||
@@ -22,11 +25,11 @@ class Create {
                 return false;
             }
 
-            $sql = "INSERT INTO reportes (nombre_completo, correo_electronico, tipo_reporte, ubicacion, descripcion_detallada, fecha_incidente)
-        VALUES (:nombre, :correo, :tipo, :ubicacion, :descripcion, :fecha)";
-
+            $sql = "INSERT INTO reportes 
+                (nombre_completo, correo_electronico, tipo_reporte, ubicacion, descripcion_detallada, fecha_incidente)
+                VALUES (:nombre, :correo, :tipo, :ubicacion, :descripcion, :fecha)";
+            
             $stmt = $this->conn->prepare($sql);
-
             $stmt->bindParam(':nombre', $data['nombre_completo']);
             $stmt->bindParam(':correo', $data['correo_electronico']);
             $stmt->bindParam(':tipo', $data['tipo_reporte']);

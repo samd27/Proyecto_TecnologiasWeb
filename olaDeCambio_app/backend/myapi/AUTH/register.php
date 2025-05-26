@@ -1,38 +1,42 @@
 <?php
-require_once __DIR__ . '/../DataBase.php';
+namespace App\AUTH;
 
+use App\DataBase;
+use PDO;
+use PDOException;
 
-header('Content-Type: application/json');
+class Register {
+    public function registrarUsuario(array $data): array {
+        if (empty($data['usuario']) || empty($data['contrasena'])) {
+            return ['success' => false, 'message' => 'Datos incompletos'];
+        }
 
-// Recibir datos
-$usuario = $_POST['usuario'] ?? null;
-$contrasena = $_POST['contrasena'] ?? null;
+        $db = new DataBase();
+        $conn = $db->getConexion();
 
-if (!$usuario || !$contrasena) {
-    echo json_encode(['success' => false, 'message' => 'Faltan datos']);
-    exit;
-}
+        if (!$conn) {
+            return ['success' => false, 'message' => 'Error de conexión'];
+        }
 
-try {
-    // Conexión con tu método
-    $db = new DataBase();
-    $conn = $db->getConexion();
+        try {
+            $stmt = $conn->prepare("SELECT * FROM usuarios WHERE usuario = :usuario");
+            $stmt->bindParam(':usuario', $data['usuario']);
+            $stmt->execute();
 
-    // Verificar si el usuario ya existe
-    $stmt = $conn->prepare("SELECT id FROM usuarios WHERE usuario = ?");
-    $stmt->execute([$usuario]);
+            if ($stmt->rowCount() > 0) {
+                return ['success' => false, 'message' => 'Usuario ya existe'];
+            }
 
-    if ($stmt->fetch()) {
-        echo json_encode(['success' => false, 'message' => 'El usuario ya existe']);
-        exit;
+            $hash = password_hash($data['contrasena'], PASSWORD_DEFAULT);
+
+            $insert = $conn->prepare("INSERT INTO usuarios (usuario, contrasena) VALUES (:usuario, :contrasena)");
+            $insert->bindParam(':usuario', $data['usuario']);
+            $insert->bindParam(':contrasena', $hash);
+            $insert->execute();
+
+            return ['success' => true, 'message' => 'Registro exitoso'];
+        } catch (PDOException $e) {
+            return ['success' => false, 'message' => 'Error en el servidor'];
+        }
     }
-
-    // Registrar usuario
-    $hashed = password_hash($contrasena, PASSWORD_DEFAULT);
-    $stmt = $conn->prepare("INSERT INTO usuarios (usuario, contrasena) VALUES (?, ?)");
-    $stmt->execute([$usuario, $hashed]);
-
-    echo json_encode(['success' => true, 'message' => 'Registro exitoso']);
-} catch (PDOException $e) {
-    echo json_encode(['success' => false, 'message' => 'Error en base de datos']);
 }

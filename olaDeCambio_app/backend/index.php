@@ -5,19 +5,24 @@ use Slim\Factory\AppFactory;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
+use App\CREATE\Create;
+use App\READ\Read;
+use App\DELETE\Delete;
+use App\UPDATE\Update;
+use App\AUTH\Login;
+use App\AUTH\Register;
+
 $app = AppFactory::create();
 $app->setBasePath('/Proyecto_TecnologiasWeb/olaDeCambio_app/backend');
+$app->addBodyParsingMiddleware();
+$app->addRoutingMiddleware();
 $app->addErrorMiddleware(true, true, true);
 
 // POST - crear
 $app->post('/api/reportes', function (Request $request, Response $response) {
-    $rawBody = $request->getBody()->getContents();
-    $data = json_decode($rawBody, true);
-
-    require_once __DIR__ . '/myapi/CREATE/Create.php';
+    $data = $request->getParsedBody();
     $creador = new Create();
     $resultado = $creador->crearReporte($data);
-
     $payload = json_encode(['status' => $resultado ? 'ok' : 'error']);
     $response->getBody()->write($payload);
     return $response->withHeader('Content-Type', 'application/json');
@@ -25,10 +30,8 @@ $app->post('/api/reportes', function (Request $request, Response $response) {
 
 // GET - leer
 $app->get('/api/reportes', function (Request $request, Response $response) {
-    require_once __DIR__ . '/myapi/READ/Read.php';
     $reader = new Read();
     $reportes = $reader->obtenerReportes();
-
     $payload = json_encode($reportes);
     $response->getBody()->write($payload);
     return $response->withHeader('Content-Type', 'application/json');
@@ -36,70 +39,75 @@ $app->get('/api/reportes', function (Request $request, Response $response) {
 
 // DELETE - eliminar
 $app->delete('/api/reportes/{id}', function (Request $request, Response $response, array $args) {
-    require_once __DIR__ . '/myapi/DELETE/Delete.php';
     $deleter = new Delete();
     $resultado = $deleter->eliminar($args['id']);
-
     $payload = json_encode(['status' => $resultado ? 'ok' : 'error']);
     $response->getBody()->write($payload);
     return $response->withHeader('Content-Type', 'application/json');
 });
 
+// PUT - actualizar
 $app->put('/api/reportes/{id}', function (Request $request, Response $response, array $args) {
-    $rawBody = $request->getBody()->getContents();
-    $data = json_decode($rawBody, true);
+    $data = $request->getParsedBody();
     $data['id'] = $args['id'];
-
-    require_once __DIR__ . '/myapi/UPDATE/Update.php';
     $updater = new Update();
     $resultado = $updater->actualizarReporte($data);
-
     $payload = json_encode(['status' => $resultado ? 'ok' : 'error']);
     $response->getBody()->write($payload);
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/registro', function ($request, $response) {
-    $body = $request->getBody()->getContents();
-    $datos = json_decode($body, true);
-
-    // Asignar a $_POST manualmente
-    $_POST['usuario'] = $datos['usuario'] ?? null;
-    $_POST['contrasena'] = $datos['contrasena'] ?? null;
-
-    require_once __DIR__ . '/myapi/AUTH/register.php';
-
+// POST - registro con clase
+$app->post('/registro', function (Request $request, Response $response) {
+    $datos = $request->getParsedBody();
+    $registro = new Register();
+    $resultado = $registro->registrarUsuario($datos);
+    $response->getBody()->write(json_encode($resultado));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-// POST /login
+// POST - login con clase
 $app->post('/login', function (Request $request, Response $response) {
     $datos = $request->getParsedBody();
-    $_POST['username'] = $datos['username'] ?? '';
-    $_POST['password'] = $datos['password'] ?? '';
-    require_once __DIR__ . '/myapi/AUTH/login.php';
+    $login = new Login();
+    $resultado = $login->iniciarSesion($datos);
+    $response->getBody()->write(json_encode($resultado));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/api/reportes/resumen', function ($request, Response $response) {
-    require_once __DIR__ . '/myapi/READ/Read.php';
+// GET - resumen dashboard
+$app->get('/api/reportes/resumen', function (Request $request, Response $response) {
     $read = new Read();
     $datos = $read->obtenerResumenDashboard();
-
     $response->getBody()->write(json_encode($datos));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/api/reportes/por-mes', function ($request, $response) {
-    require_once __DIR__ . '/myapi/READ/Read.php';
+// GET - reportes por mes
+$app->get('/api/reportes/por-mes', function (Request $request, Response $response) {
     $read = new Read();
-
     $datos = $read->obtenerReportesPorMes();
-
     $response->getBody()->write(json_encode($datos));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
+// GET - sesión actual
+$app->get('/session', function (Request $request, Response $response) {
+    session_start();
+    $resultado = [
+        'loggedIn' => isset($_SESSION['usuario']),
+        'usuario' => $_SESSION['usuario'] ?? null
+    ];
+    $response->getBody()->write(json_encode($resultado));
+    return $response->withHeader('Content-Type', 'application/json');
+});
 
+// GET - logout
+$app->get('/logout', function (Request $request, Response $response) {
+    session_start();
+    session_destroy();
+    $response->getBody()->write(json_encode(['success' => true, 'message' => 'Sesión cerrada']));
+    return $response->withHeader('Content-Type', 'application/json');
+});
 
 $app->run();
