@@ -60,7 +60,6 @@ $app->put('/api/reportes/{id}', function (Request $request, Response $response, 
 });
 
 $app->post('/registro', function ($request, $response) {
-    // ⚠️ Extraer contenido JSON crudo
     $body = $request->getBody()->getContents();
     $datos = json_decode($body, true);
 
@@ -73,15 +72,31 @@ $app->post('/registro', function ($request, $response) {
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-
-
-
 // POST /login
 $app->post('/login', function (Request $request, Response $response) {
     $datos = $request->getParsedBody();
     $_POST['username'] = $datos['username'] ?? '';
     $_POST['password'] = $datos['password'] ?? '';
     require_once __DIR__ . '/myapi/AUTH/login.php';
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+$app->get('/api/reportes/resumen', function ($request, Response $response) {
+    require_once __DIR__ . '/myapi/READ/Read.php';
+    $read = new Read();
+    $datos = $read->obtenerResumenDashboard();
+
+    $response->getBody()->write(json_encode($datos));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+$app->get('/api/reportes/por-mes', function ($request, $response) {
+    require_once __DIR__ . '/myapi/READ/Read.php';
+    $read = new Read();
+
+    $datos = $read->obtenerReportesPorMes();
+
+    $response->getBody()->write(json_encode($datos));
     return $response->withHeader('Content-Type', 'application/json');
 });
 

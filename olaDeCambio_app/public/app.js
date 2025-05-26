@@ -12,7 +12,7 @@ $(document).ready(function () {
   const $botonCancelar = $('#btn-cancelar');
   const baseApi = '/Proyecto_TecnologiasWeb/olaDeCambio_app/backend/api/reportes';
 
-  // ✅ Verificar sesión activa
+  //  Verificar sesión activa
   $.getJSON('../backend/myapi/AUTH/session.php', function (data) {
     if (data.usuario) {
       $('#usuario-logueado').html(`
@@ -26,7 +26,7 @@ $(document).ready(function () {
     }
   });
 
-  // ✅ CRUD de reportes
+  //  CRUD de reportes
   $form.on('submit', function (e) {
     e.preventDefault();
     const datos = Object.fromEntries(new FormData(this).entries());
@@ -147,7 +147,7 @@ $(document).ready(function () {
 
   cargarReportes();
 
-  // ✅ Registro
+  //  Registro
   $('#form-registro').on('submit', function (e) {
     e.preventDefault();
 
@@ -174,7 +174,7 @@ $(document).ready(function () {
     });
   });
 
-  // ✅ Login
+  //  Login
   $('#login form').on('submit', function (e) {
     e.preventDefault();
 
@@ -207,7 +207,7 @@ $(document).ready(function () {
     });
   });
 
-  // ✅ Ir a registro
+  // Ir a registro
   $('#btn-ir-registro').on('click', function (e) {
     e.preventDefault();
     $('.tabcontent').removeClass('active');
@@ -215,17 +215,139 @@ $(document).ready(function () {
     $('#registro').addClass('active');
   });
 
-  // ✅ Volver a login
+  // Volver a login
   $('#btn-ir-login').on('click', function (e) {
     e.preventDefault();
     $('.tabcontent').removeClass('active');
     $('#login').addClass('active');
   });
 
-  // ✅ Cerrar sesión
+  // Cerrar sesión
   $('#btn-logout').on('click', function () {
     $.get('../backend/myapi/AUTH/logout.php', function () {
       location.reload();
     });
   });
 });
+
+// Dashboard
+const tipoReporteEtiquetas = {
+  contaminacion: "Contaminación marina",
+  fauna: "Fauna en peligro",
+  pesca: "Pesca ilegal",
+  otro: "Otro"
+};
+
+
+$(document).ready(function () {
+  if ($('#graficoTipos').length) {
+   $.ajax({
+  url: '../backend/api/reportes/resumen',
+  method: 'GET',
+  dataType: 'json',
+  success: function (data) {
+    $('#total-reportes').text(data.total);
+    $('#tipo-mas-comun').text(tipoReporteEtiquetas[data.tipo_mas_comun] || data.tipo_mas_comun);
+    $('#estado-top').text(data.estado_top);
+
+    new Chart($('#graficoTipos'), {
+      type: 'doughnut',
+      data: {
+        labels: data.por_tipo.labels.map(val => tipoReporteEtiquetas[val] || val),
+        datasets: [{
+          data: data.por_tipo.valores,
+          backgroundColor: ['#2ecc71', '#e67e22', '#3498db', '#9b59b6']
+        }]
+      }
+    });
+
+    new Chart($('#graficoEstados'), {
+      type: 'bar',
+      data: {
+        labels: data.por_estado.labels,
+        datasets: [{
+          label: 'Reportes por Estado',
+          data: data.por_estado.valores,
+          backgroundColor: '#9b59b6'
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  },
+  error: function (xhr, status, error) {
+    console.error("Error al cargar el dashboard:", error);
+  }
+});
+
+  $.ajax({
+  url: '../backend/api/reportes/por-mes',
+  method: 'GET',
+  dataType: 'json',
+  success: function (data) {
+    new Chart($('#graficoLineaMeses'), {
+  type: 'line',
+  data: {
+    labels: data.labels,
+    datasets: [{
+      label: 'Reportes por mes',
+      data: data.valores,
+      borderColor: '#2980b9',
+      backgroundColor: '#2980b9',
+      fill: false,
+      tension: 0.3,
+      pointRadius: 4,
+      pointHoverRadius: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Cronograma de reportes',
+        font: {
+          size: 20,
+          weight: 'bold'
+        },
+        padding: {
+          top: 10,
+          bottom: 20
+        }
+      },
+      legend: {
+        display: false
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          stepSize: 1
+        }
+      },
+      x: {
+        ticks: {
+          maxRotation: 45,
+          minRotation: 45
+        }
+      }
+    }
+  }
+});
+
+  },
+  error: function (xhr, status, error) {
+    console.error("Error al cargar gráfico de línea:", error);
+  }
+});
+
+
+  }
+});
+

@@ -33,7 +33,8 @@
     <a href="#" class="tablink active" onclick="openTab(event, 'inicio')">Inicio</a>
     <a href="#" class="tablink" onclick="openTab(event, 'informacion')">Información</a>
     <a href="#" class="tablink" onclick="openTab(event, 'estadisticas')">Estadísticas</a>
-    <a href="#" class="tablink oculto" id="nav-quejas" onclick="openTab(event, 'reportes')">Quejas</a>
+    <a href="#" class="tablink" onclick="openTab(event, 'datos')">Datos</a>
+    <a href="#" class="tablink oculto" id="nav-quejas" onclick="openTab(event, 'reportes')">Reportes</a>
     <a href="#" class="tablink" onclick="openTab(event, 'login')">Login</a>
   </nav>
 
@@ -92,7 +93,7 @@
         La conservación de los océanos es crucial para mantener la biodiversidad y garantizar la salud del planeta.
       </p>
       
-      <h2>accidentes </h2>
+      <h2>Accidentes </h2>
       <p>En el mar, los accidentes pueden ocurrir de diversas formas, desde colisiones entre embarcaciones hasta derrames de petróleo y contaminación por desechos. 
         Estos incidentes no solo afectan la vida marina, sino que también pueden tener un impacto devastador en las comunidades costeras y la economía local. 
         La prevención y respuesta a estos accidentes son cruciales para proteger nuestros océanos y costas.
@@ -131,7 +132,7 @@
         <img src="img/pemex/pemex_2.jpg" alt="fuga de gas">
       </div>
 
-      <h3>corales</h3>
+      <h3>Corales</h3>
 
       <p>Los corales son organismos marinos que forman estructuras
         conocidas como arrecifes, que son vitales para la biodiversidad marina. 
@@ -205,7 +206,7 @@
         Las acciones incluyen la contención del derrame, la limpieza de las áreas afectadas y la rehabilitación de los ecosistemas dañados. 
         La prevención de futuros incidentes también es fundamental, lo que implica la implementación de regulaciones más estrictas y mejores prácticas en la industria.
       </p>
-      <h4>medidas de prevencion </h4>
+      <h4>Medidas de prevencion </h4>
       <ul>
         <li>Monitoreo constante de plataformas petroleras y ductos submarinos.</li>
         <li>Implementación de tecnologías avanzadas para la detección temprana de fugas.</li>
@@ -226,7 +227,7 @@
         La investigación científica y la tecnología pueden desempeñar un papel crucial en la conservación de los ecosistemas marinos.
         La implementación de áreas marinas protegidas, la restauración de hábitats degradados y la promoción de prácticas pesqueras sostenibles son algunas de las estrategias que pueden ayudar a preservar la biodiversidad marina y garantizar la salud de nuestros océanos para las generaciones futuras.
       </p>
-      <h4>medidas de prevencion </h4>
+      <h4>Medidas de prevencion </h4>
       <ul>
         <li>Establecimiento de áreas marinas protegidas para limitar la pesca y la actividad humana.</li>
         <li>Restauración de hábitats degradados mediante programas de replantación de corales.</li>
@@ -242,25 +243,52 @@
     </div>
   
 
-    <!-- ESTADÍSTICAS -->
-    <div id="estadisticas" class="tabcontent">
-      <h2>Estadísticas del Océano</h2>
-      <div class="datos-grid">
-        <div>
-          <h3>70%</h3>
-          <p>de la Tierra cubierta por océanos</p>
-        </div>
-        <div>
-          <h3>8M</h3>
-          <p>de toneladas de plástico por año</p>
-        </div>
-        <div>
-          <h3>30%</h3>
-          <p>de especies marinas sobreexplotadas</p>
-        </div>
-      </div>
-    </div>
+<!-- ESTADÍSTICAS -->
 
+
+
+
+
+
+
+<!-- Datos de reportes -->
+<div id="datos" class="tabcontent">
+  <h2>Dashboard de Estadísticas</h2>
+
+  <div class="dashboard-cards">
+    <div class="card">
+      <h3>Total Reportes</h3>
+      <p id="total-reportes">Cargando...</p>
+    </div>
+    <div class="card">
+      <h3>Tipo de reporte más común</h3>
+      <p id="tipo-mas-comun">-</p>
+    </div>
+    <div class="card">
+      <h3>Estado con más reportes</h3>
+      <p id="estado-top">-</p>
+    </div>
+  </div>
+
+  <div class="dashboard-charts">
+    <div class="chart-container">
+      <canvas id="graficoTipos"></canvas>
+    </div>
+    <div class="chart-container">
+      <canvas id="graficoEstados"></canvas>
+    </div>
+  </div>
+
+  <h2 class="seccion-titulo">Cronograma de reportes</h2>
+  <div class="chart-container chart-grande">
+    <canvas id="graficoLineaMeses"></canvas>
+  </div>
+</div>
+
+
+
+
+</div>
     <!-- QUEJAS / REPORTES -->
     <div id="reportes" class="tabcontent">
       <div class="container" style="display: flex; flex-direction: column; gap: 20px; align-items: center;">
@@ -358,8 +386,7 @@
     </div>
   </div>
 
-  <!-- REGISTRO -->
-<!-- REGISTRO -->
+
 <!-- REGISTRO -->
 <div id="registro" class="tabcontent">
   <div class="login-container">
@@ -384,6 +411,7 @@
   </footer>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="app.js"></script>
 
 </body>

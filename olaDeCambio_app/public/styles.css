@@ -302,3 +302,55 @@ footer {
   vertical-align: middle;
 }
 
+
+/* Envolver el contenido para limitar el ancho */
+.dashboard-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* Tarjetas */
+.dashboard-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.card {
+  flex: 1 1 250px;
+  max-width: 300px;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Gráficos */
+.dashboard-charts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.chart-container {
+  max-width: 450px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.chart-grande {
+  max-width: 1000px;
+}
+
+
+
+.chart-container canvas {
+  width: 100% !important;
+  height: auto !important;
+}
+
